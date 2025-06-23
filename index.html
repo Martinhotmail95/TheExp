@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -110,19 +108,7 @@
       height: 100%;
       width: 100%;
       background: black;
-      position: relative;
       z-index: 1;
-    }
-
-    .flash {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: white;
-      opacity: 0;
-      z-index: 10;
     }
   </style>
 </head>
@@ -146,9 +132,7 @@
     <button class="btn-start" onclick="startExperience()">COMENZAR</button>
   </div>
 
-  <div class="experience" id="experience">
-    <div class="flash" id="flash"></div>
-  </div>
+  <div class="experience" id="experience"></div>
   <audio id="music" preload="auto"></audio>
 
   <script>
@@ -172,7 +156,6 @@
     function startExperience() {
       document.getElementById('instructions').style.display = 'none';
       const exp = document.getElementById('experience');
-      const flash = document.getElementById('flash');
       exp.style.display = 'block';
 
       const audio = document.getElementById('music');
@@ -204,11 +187,12 @@
         }
         const average = sum / bufferLength;
 
-if (average > 160) {
-  exp.style.backgroundColor = 'white';
-} else {
-  exp.style.backgroundColor = 'black';
-}
+        if (average > 160) {
+          exp.style.backgroundColor = 'white';
+        } else {
+          exp.style.backgroundColor = 'black';
+        }
+      }
 
       animate();
     }
