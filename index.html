@@ -167,16 +167,18 @@
       audio.play();
 
       let lastPeak = 0;
-      const peakThreshold = 160;
-      const peakCooldown = 100; // ms
+      const peakThreshold = 200;
+      const peakCooldown = 150; // ms
 
       function animate() {
         requestAnimationFrame(animate);
         analyser.getByteFrequencyData(dataArray);
         let sum = 0;
-        for (let i = 0; i < bufferLength; i++) {
-          sum += dataArray[i] * (i + 1); // ponderación por frecuencia
-        }
+for (let i = 0; i < bufferLength; i++) {
+  // Peso inverso: los índices más bajos (frecuencias graves) valen más
+  const weight = (bufferLength - i);
+  sum += dataArray[i] * weight;
+}
         const average = sum / bufferLength;
         const now = Date.now();
 
