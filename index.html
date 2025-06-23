@@ -29,6 +29,7 @@
       align-items: center;
       position: relative;
       overflow: hidden;
+      z-index: 1;
     }
 
     .background-elements::before {
@@ -56,15 +57,15 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
     h1 {
       font-size: 2em;
       letter-spacing: 0.3em;
       margin-top: 10px;
-      z-index: 1;
       position: relative;
+      z-index: 2;
     }
 
     .btn-group {
@@ -73,7 +74,7 @@
       justify-content: center;
       gap: 10px;
       margin-top: 20px;
-      z-index: 1;
+      z-index: 2;
     }
 
     .btn-start {
@@ -88,6 +89,8 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       transition: all 0.3s ease;
+      z-index: 3;
+      position: relative;
     }
 
     .btn-start:hover {
@@ -100,6 +103,8 @@
       font-size: 1.5em;
       margin: 10px 0;
       text-shadow: 0 0 10px #ff00cc;
+      position: relative;
+      z-index: 2;
     }
 
     .experience {
@@ -108,6 +113,7 @@
       width: 100%;
       background: black;
       transition: background-color 0.2s ease;
+      z-index: 1;
     }
   </style>
 </head>
@@ -136,10 +142,8 @@
 
   <script>
     let audioContext;
-    let currentTrack = '';
 
     function selectSong(track) {
-      currentTrack = track;
       const audio = document.getElementById('music');
       if (track === 'vintage') {
         audio.src = 'vintage.mp3';
@@ -204,4 +208,5 @@
   </script>
 </body>
 </html>
+
 
