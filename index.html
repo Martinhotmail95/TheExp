@@ -136,8 +136,10 @@
 
   <script>
     let audioContext;
+    let currentTrack = '';
 
     function selectSong(track) {
+      currentTrack = track;
       const audio = document.getElementById('music');
       if (track === 'vintage') {
         audio.src = 'vintage.mp3';
@@ -158,7 +160,11 @@
       exp.style.display = 'block';
 
       const audio = document.getElementById('music');
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
       const source = audioContext.createMediaElementSource(audio);
       const analyser = audioContext.createAnalyser();
       source.connect(analyser);
@@ -167,7 +173,11 @@
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
 
-      audio.play();
+      audio.play().then(() => {
+        console.log("Audio reproducido exitosamente");
+      }).catch((e) => {
+        console.error("Error al reproducir el audio:", e);
+      });
 
       const colors = ['#ffffff', '#ff00cc', '#00ffff', '#ff6600', '#9900ff', '#ff0033'];
 
@@ -194,3 +204,4 @@
   </script>
 </body>
 </html>
+
