@@ -172,18 +172,21 @@
 
       let previousAverage = 0;
 
+let previousAverage = 0;
+
 function animate() {
   requestAnimationFrame(animate);
   analyser.getByteFrequencyData(dataArray);
+
   let sum = 0;
-  for (let i = 0; i < bufferLength; i++) {
-    const weight = (bufferLength - i);
-    sum += dataArray[i] * weight;
+  const graveLimit = 50;
+  for (let i = 0; i < graveLimit; i++) {
+    sum += dataArray[i];
   }
-  const average = sum / bufferLength;
+  const average = sum / graveLimit;
   const now = Date.now();
 
-  if (average > peakThreshold && average > previousAverage + 10 && now - lastPeak > peakCooldown) {
+  if (average > 150 && average > previousAverage + 5 && now - lastPeak > 150) {
     exp.style.backgroundColor = 'white';
     lastPeak = now;
   } else if (now - lastPeak > 50) {
