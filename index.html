@@ -204,12 +204,11 @@
         }
         const average = sum / bufferLength;
 
-        if (average > 160) {
-          flash.style.opacity = 1;
-        } else {
-          flash.style.opacity = 0;
-        }
-      }
+if (average > 160) {
+  exp.style.backgroundColor = 'white';
+} else {
+  exp.style.backgroundColor = 'black';
+}
 
       animate();
     }
