@@ -31,7 +31,7 @@
       overflow: hidden;
     }
 
-    .background-elements::before {
+    .flyer::before, .instructions::before {
       content: "";
       position: absolute;
       width: 200%;
@@ -50,7 +50,6 @@
       font-family: 'Russo One', sans-serif;
       font-size: 14em;
       font-weight: 700;
-      color: #fff;
       text-shadow: 0 0 40px #ff00ff, 0 0 60px #ff0099, 0 0 80px #ff6600;
       background: linear-gradient(to right, #ff00cc, #3333ff);
       -webkit-background-clip: text;
@@ -115,7 +114,7 @@
     <button class="btn-start" onclick="selectSong('daddy')">Daddy Yankee</button>
   </div>
 
-  <div class="instructions background-elements" id="instructions">
+  <div class="instructions background-elements" id="instructions" style="display: none;">
     <p>1 - CONECTA TUS AURICULARES <span style="color: orange">(ESENCIAL)</span></p>
     <p>2 - SUBE EL VOLUMEN DE TU CELULAR</p>
     <p>3 - AUMENTA EL BRILLO</p>
@@ -127,15 +126,13 @@
   <audio id="music" preload="auto"></audio>
 
   <script>
-    let selectedTrack = '';
     let audioContext;
     let analyser;
     let source;
-    let bufferLength;
     let dataArray;
+    let bufferLength;
 
     function selectSong(track) {
-      selectedTrack = track;
       const audio = document.getElementById('music');
       if (track === 'vintage') {
         audio.src = 'vintage.mp3';
@@ -151,11 +148,10 @@
     }
 
     function startExperience() {
-      document.getElementById('instructions').style.display = 'none';
       const exp = document.getElementById('experience');
-      exp.style.display = 'block';
-
       const audio = document.getElementById('music');
+      document.getElementById('instructions').style.display = 'none';
+      exp.style.display = 'block';
 
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -168,9 +164,7 @@
         dataArray = new Uint8Array(bufferLength);
       }
 
-      audio.play().then(() => {
-        console.log("Audio reproduciendo");
-      }).catch((e) => console.error("Error al reproducir el audio", e));
+      audio.play();
 
       function animate() {
         requestAnimationFrame(animate);
@@ -180,7 +174,7 @@
           sum += dataArray[i];
         }
         const average = sum / bufferLength;
-        exp.style.backgroundColor = average > 160 ? 'white' : 'black';
+        exp.style.backgroundColor = average > 150 ? 'white' : 'black';
       }
 
       animate();
