@@ -159,22 +159,33 @@
         analyser = audioContext.createAnalyser();
         source.connect(analyser);
         analyser.connect(audioContext.destination);
-        analyser.fftSize = 256;
+        analyser.fftSize = 1024;
         bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
       }
 
       audio.play();
 
+      let lastPeak = 0;
+      const peakThreshold = 160;
+      const peakCooldown = 100; // ms
+
       function animate() {
         requestAnimationFrame(animate);
         analyser.getByteFrequencyData(dataArray);
         let sum = 0;
         for (let i = 0; i < bufferLength; i++) {
-          sum += dataArray[i];
+          sum += dataArray[i] * (i + 1); // ponderación por frecuencia
         }
         const average = sum / bufferLength;
-        exp.style.backgroundColor = average > 15 ? 'white' : 'black';
+        const now = Date.now();
+
+        if (average > peakThreshold && now - lastPeak > peakCooldown) {
+          exp.style.backgroundColor = 'white';
+          lastPeak = now;
+        } else if (now - lastPeak > 50) {
+          exp.style.backgroundColor = 'black';
+        }
       }
 
       animate();
@@ -182,4 +193,5 @@
   </script>
 </body>
 </html>
+
 
