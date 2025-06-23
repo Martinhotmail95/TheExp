@@ -173,24 +173,36 @@
       let previousAverage = 0;
 
 let previousAverage = 0;
+let flashTimeout = null;
 
 function animate() {
   requestAnimationFrame(animate);
   analyser.getByteFrequencyData(dataArray);
 
+  // analizar solo graves (primeros 32 valores)
   let sum = 0;
-  const graveLimit = 50;
+  const graveLimit = 32;
   for (let i = 0; i < graveLimit; i++) {
     sum += dataArray[i];
   }
+
   const average = sum / graveLimit;
   const now = Date.now();
 
-  if (average > 150 && average > previousAverage + 5 && now - lastPeak > 150) {
+  // detectar pico de bajo
+  if (
+    average > 170 &&
+    average > previousAverage + 10 &&
+    now - lastPeak > 200
+  ) {
     exp.style.backgroundColor = 'white';
     lastPeak = now;
-  } else if (now - lastPeak > 50) {
-    exp.style.backgroundColor = 'black';
+
+    // apagar flash después de 60ms
+    clearTimeout(flashTimeout);
+    flashTimeout = setTimeout(() => {
+      exp.style.backgroundColor = 'black';
+    }, 60);
   }
 
   previousAverage = average;
