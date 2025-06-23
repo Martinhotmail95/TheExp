@@ -167,27 +167,30 @@
       audio.play();
 
       let lastPeak = 0;
-      const peakThreshold = 200;
+      const peakThreshold = 500;
       const peakCooldown = 150; // ms
 
-      function animate() {
-        requestAnimationFrame(animate);
-        analyser.getByteFrequencyData(dataArray);
-        let sum = 0;
-for (let i = 0; i < bufferLength; i++) {
-  // Peso inverso: los índices más bajos (frecuencias graves) valen más
-  const weight = (bufferLength - i);
-  sum += dataArray[i] * weight;
-}
-        const average = sum / bufferLength;
-        const now = Date.now();
+      let previousAverage = 0;
 
-        if (average > peakThreshold && now - lastPeak > peakCooldown) {
-          exp.style.backgroundColor = 'white';
-          lastPeak = now;
-        } else if (now - lastPeak > 50) {
-          exp.style.backgroundColor = 'black';
-        }
+function animate() {
+  requestAnimationFrame(animate);
+  analyser.getByteFrequencyData(dataArray);
+  let sum = 0;
+  for (let i = 0; i < bufferLength; i++) {
+    const weight = (bufferLength - i);
+    sum += dataArray[i] * weight;
+  }
+  const average = sum / bufferLength;
+  const now = Date.now();
+
+  if (average > peakThreshold && average > previousAverage + 10 && now - lastPeak > peakCooldown) {
+    exp.style.backgroundColor = 'white';
+    lastPeak = now;
+  } else if (now - lastPeak > 50) {
+    exp.style.backgroundColor = 'black';
+  }
+
+  previousAverage = average;
       }
 
       animate();
